@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { clearSendOTPAction, sendOTPAction } from "@/store/actions";
+import { loginSendOTPAction, clearLoginSendOTPAction } from "@/store/actions";
 
 export default function Login() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function Login() {
     successData: sendOTPSuccessData,
     error: sendOTPError,
     errorInfo: sendOTPErrorInfo,
-  } = useAppSelector((state) => state.sendOTPReducer);
+  } = useAppSelector((state) => state.loginSendOTPReducer);
 
   // Handle OTP success
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function Login() {
 
     router.push(`/verify?m=${encodeURIComponent(mobile)}`);
 
-    dispatch(clearSendOTPAction());
+    dispatch(clearLoginSendOTPAction());
   }, [sendOTPSuccessData, dispatch, router, mobile]);
 
   // Handle API errors
@@ -68,7 +68,7 @@ export default function Login() {
 
     setError("");
 
-    dispatch(sendOTPAction({ mobile }));
+    dispatch(loginSendOTPAction({ mobile }));
   };
 
   return (

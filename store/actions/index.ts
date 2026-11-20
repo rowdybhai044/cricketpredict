@@ -1,11 +1,13 @@
-import { loginAction, clearLoginAction } from "../slices/auth-login";
-import { sendOTPAction, clearSendOTPAction } from "../slices/auth-send-otp";
-import { verifyOTPAction, clearVerifyOTPAction } from "../slices/auth-verify-otp"
+import { loginSendOTPAction, clearLoginSendOTPAction } from "../slices/auth-login-send-otp";
+import { loginVerifyOTPAction, clearLoginVerifyOTPAction } from "../slices/auth-login-verify-otp"
+import { signUpSendOTPAction, clearSignUpSendOTPAction } from "../slices/auth-signup-send-otp";
+import { signUpVerifyOTPAction, clearSignUpVerifyOTPAction } from "../slices/auth-signup-verify-otp";
 import { getAllMatchesAction, clearGetAllMatchesAction } from "../slices/get-all-matches"
 
 export {
-  loginAction, clearLoginAction,
-  sendOTPAction, clearSendOTPAction,
-  verifyOTPAction, clearVerifyOTPAction,
-  getAllMatchesAction, clearGetAllMatchesAction
+  loginSendOTPAction, clearLoginSendOTPAction,
+  loginVerifyOTPAction, clearLoginVerifyOTPAction,
+  signUpSendOTPAction, clearSignUpSendOTPAction,
+  signUpVerifyOTPAction, clearSignUpVerifyOTPAction,
+  getAllMatchesAction, clearGetAllMatchesAction,
 }

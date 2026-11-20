@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { maskMobile } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { clearSendOTPAction, sendOTPAction, verifyOTPAction } from "@/store/actions";
+import { loginVerifyOTPAction, clearLoginVerifyOTPAction, loginSendOTPAction, clearLoginSendOTPAction } from "@/store/actions";
 
 function VerifyInner() {
   const dispatch = useAppDispatch();
@@ -25,14 +25,14 @@ function VerifyInner() {
     successData: sendOTPSuccessData,
     error: sendOTPError,
     errorInfo: sendOTPErrorInfo,
-  } = useAppSelector((state) => state.sendOTPReducer);
+  } = useAppSelector((state) => state.loginSendOTPReducer);
 
   const {
     loading: verifyOTPLoading,
     successData: verifyOTPSuccessData,
     error: verifyOTPError,
     errorInfo: verifyOTPErrorInfo,
-  } = useAppSelector((state) => state.verifyOTPReducer);
+  } = useAppSelector((state) => state.loginVerifyOTPReducer);
 
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
   const [t, setT] = useState(30);
@@ -98,7 +98,7 @@ function VerifyInner() {
     setDigits(Array(6).fill(""));
     setT(30);
 
-    dispatch(clearSendOTPAction());
+    dispatch(clearLoginSendOTPAction());
   }, [sendOTPSuccessData, dispatch]);
 
   useEffect(() => {
@@ -156,7 +156,7 @@ function VerifyInner() {
 
     setError("");
 
-    dispatch(sendOTPAction({ mobile }));
+    dispatch(loginSendOTPAction({ mobile }));
   };
 
   // Verify OTP API
@@ -177,7 +177,7 @@ function VerifyInner() {
 
     // Send mobile + OTP to backend
     dispatch(
-      verifyOTPAction({
+      loginVerifyOTPAction({
         mobile: mobile,
         otp: code,
       })

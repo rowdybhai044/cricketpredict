@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 
-import loginReducer from "../slices/auth-login";
-import sendOTPReducer from "../slices/auth-send-otp";
-import verifyOTPReducer from "../slices/auth-verify-otp";
+import loginSendOTPReducer from "../slices/auth-login-send-otp";
+import loginVerifyOTPReducer from "../slices/auth-login-verify-otp";
+import signUpSendOTPReducer from "../slices/auth-signup-send-otp";
+import signUpVerifyOTPReducer from "../slices/auth-signup-verify-otp";
 import getAllMatchesReducer from "../slices/get-all-matches";
 
 const rootReducer = combineReducers({
-  loginReducer,
-  sendOTPReducer, verifyOTPReducer,
+  loginSendOTPReducer, loginVerifyOTPReducer,
+  signUpSendOTPReducer, signUpVerifyOTPReducer,
   getAllMatchesReducer,
 });
 
