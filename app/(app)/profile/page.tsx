@@ -41,6 +41,12 @@ export default function Profile() {
     return () => window.removeEventListener("beforeinstallprompt", h);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear()
+    // router.push('/login');
+    router.push("/welcome")
+  }
+
   return (
     <>
       <PageHeader title="Profile" back={false} />
@@ -85,8 +91,30 @@ export default function Profile() {
         <p className="pb-2 text-center text-xs text-muted">TossWin v1.0 · 18+ · Play responsibly</p>
       </div>
 
-      <Modal open={logout} onClose={() => setLogout(false)} title="Log out?" description="You can log back in with an OTP anytime."
-        footer={<><Button variant="outline" className="flex-1" onClick={() => setLogout(false)}>Stay</Button><Button variant="dangerSolid" className="flex-1" onClick={() => { toast.success("Logged out"); router.push("/welcome"); }}>Log out</Button></>}>
+      <Modal
+        open={logout}
+        onClose={() => setLogout(false)}
+        title="Log out?"
+        description="You can log back in with an OTP anytime."
+        footer={
+          <>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setLogout(false)}
+            >
+              Stay
+            </Button>
+            <Button
+              variant="dangerSolid"
+              className="flex-1"
+              onClick={handleLogout}
+            >
+              Log out
+            </Button>
+          </>
+        }
+      >
         <span />
       </Modal>
     </>

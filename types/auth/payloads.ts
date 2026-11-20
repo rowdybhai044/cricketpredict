@@ -1,10 +1,21 @@
+export interface LoginPasswordPayload {
+  mobile: string;
+  password: string;
+}
+
 export interface LoginSendOTPPayload {
   mobile: string;
 }
 
-export interface LoginVerifyOTPPayload {
+export interface VerifyOTPPayload {
   mobile: string;
   otp: string;
+  action: string;
+}
+
+export interface ResendOTPPayload {
+  mobile: string;
+  action: string;
 }
 
 export interface SignUpSendOTPPayload {
@@ -12,9 +23,4 @@ export interface SignUpSendOTPPayload {
   date_of_birth: string;
   password: string;
   mobile: string;
-}
-
-export interface SignUpVerifyOTPPayload {
-  mobile: string;
-  otp: string;
 }
