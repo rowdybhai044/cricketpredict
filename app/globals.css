@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-background: 247 249 252;
+  --c-surface: 255 255 255;
+  --c-elevated: 241 245 249;
+  --c-border: 227 232 239;
+  --c-foreground: 15 23 42;
+  --c-muted: 100 116 139;
+  --c-primary: 5 150 105;
+  --c-primary-fg: 255 255 255;
+  --c-accent: 161 98 7;
+  --c-info: 37 99 235;
+  --c-warning: 217 119 6;
+  --c-danger: 220 38 38;
+}
+.dark {
+  --c-background: 11 15 20;
+  --c-surface: 18 24 33;
+  --c-elevated: 26 34 48;
+  --c-border: 36 48 68;
+  --c-foreground: 230 235 242;
+  --c-muted: 138 151 171;
+  --c-primary: 16 185 129;
+  --c-primary-fg: 4 20 14;
+  --c-accent: 245 184 65;
+  --c-info: 59 130 246;
+  --c-warning: 245 158 11;
+  --c-danger: 239 68 68;
+}
+
+@layer base {
+  * { @apply border-border; -webkit-tap-highlight-color: transparent; }
+  html { color-scheme: light; }
+  html.dark { color-scheme: dark; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  input, button, select, textarea { font: inherit; }
+  :focus-visible { @apply outline-none ring-2 ring-primary/60 ring-offset-2 ring-offset-background; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+}
+
+@layer utilities {
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
