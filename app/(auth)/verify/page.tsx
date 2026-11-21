@@ -10,7 +10,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { maskMobile } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loginVerifyOTPAction, clearLoginVerifyOTPAction, loginSendOTPAction, clearLoginSendOTPAction } from "@/store/actions";
+import {
+  verifyOTPAction,
+  clearVerifyOTPAction,
+  resendOTPAction,
+  clearResendOTPAction,
+} from "@/store/actions";
+import { saveAuth } from "@/lib/auth";
 
 function VerifyInner() {
   const dispatch = useAppDispatch();
@@ -19,20 +25,30 @@ function VerifyInner() {
 
   // Mobile number received from Login page
   const mobile = searchParams.get("m") ?? "";
+  type AuthType = "login" | "signup" | "forgot_password";
+
+  const type = searchParams.get("t");
+
+  const authType: AuthType =
+    type === "signup" || type === "register"
+      ? "signup"
+      : type === "forgot_password"
+        ? "forgot_password"
+        : "login";
 
   const {
-    loading: sendOTPLoading,
-    successData: sendOTPSuccessData,
-    error: sendOTPError,
-    errorInfo: sendOTPErrorInfo,
-  } = useAppSelector((state) => state.loginSendOTPReducer);
+    loading: resendLoading,
+    successData: resendSuccessData,
+    error: resendError,
+    errorInfo: resendErrorInfo,
+  } = useAppSelector((state) => state.resendOTPReducer);
 
   const {
     loading: verifyOTPLoading,
     successData: verifyOTPSuccessData,
     error: verifyOTPError,
     errorInfo: verifyOTPErrorInfo,
-  } = useAppSelector((state) => state.loginVerifyOTPReducer);
+  } = useAppSelector((state) => state.verifyOTPReducer);
 
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
   const [t, setT] = useState(30);
@@ -60,54 +76,86 @@ function VerifyInner() {
 
   // Handle successful verification
   useEffect(() => {
-    if (!verifyOTPSuccessData) return;
+    if (!verifyOTPSuccessData || !authType) return;
 
-    const userData = verifyOTPSuccessData?.user
+    dispatch(clearVerifyOTPAction());
 
-    toast.success("Mobile number verified");
-    localStorage.setItem("token", verifyOTPSuccessData?.tokens?.access)
-    localStorage.setItem("role", userData?.role)
-    localStorage.setItem("userId", String(userData?.id))
-    localStorage.setItem("name", userData?.name)
-    localStorage.setItem("dob", userData?.date_of_birth)
-    localStorage.setItem("wallet", userData?.wallet_balance)
-    localStorage.setItem("date_joined", userData?.date_joined)
+    // Signup: redirect to login without saving authentication
+    if (authType === "signup") {
+      toast.success("Account created successfully! Please login.");
 
-    if (userData?.role === "user") {
-      router.push("/");
-    } else if (userData?.role === "admin") {
-      router.push("/");
+      router.replace("/login");
+      return;
     }
 
-  }, [verifyOTPSuccessData, router]);
+    // Forgot password: implement later
+    if (authType === "forgot_password") {
+      toast.success("OTP verified successfully.");
 
-  // Handle API errors
+      router.push(
+        `/reset-password?m=${encodeURIComponent(mobile)}`
+      );
+      return;
+    }
+
+
+    // Login: save authentication
+    if (authType === "login") {
+      saveAuth(verifyOTPSuccessData);
+
+      toast.success("Logged in successfully!");
+
+      const role = verifyOTPSuccessData?.user?.role;
+
+      if (role === "user") {
+        router.replace("/");
+      } else if (role === "admin") {
+        // Temporary: admin dashboard will be implemented later
+        router.replace("/");
+      } else {
+        toast.error("Invalid user role.");
+        router.replace("/login");
+      }
+    }
+
+  }, [verifyOTPSuccessData, authType, mobile, dispatch, router]);
+
+  // Handle verification API errors
   useEffect(() => {
     if (!verifyOTPError) return;
 
     setError(
       verifyOTPErrorInfo || "Invalid OTP. Please try again."
     );
-  }, [verifyOTPError, verifyOTPErrorInfo]);
 
+    dispatch(clearVerifyOTPAction());
+  }, [verifyOTPError, verifyOTPErrorInfo, dispatch]);
+
+  // Resend OTP success
   useEffect(() => {
-    if (!sendOTPSuccessData) return;
+    if (!resendSuccessData) return;
 
     toast.success("OTP resent successfully");
 
     setDigits(Array(6).fill(""));
     setT(30);
+    setError("");
 
-    dispatch(clearLoginSendOTPAction());
-  }, [sendOTPSuccessData, dispatch]);
+    refs.current[0]?.focus();
 
+    dispatch(clearResendOTPAction());
+  }, [resendSuccessData, dispatch]);
+
+  // Resend OTP error
   useEffect(() => {
-    if (!sendOTPError) return;
+    if (!resendError) return;
 
     setError(
-      sendOTPErrorInfo || "Unable to resend OTP. Please try again."
+      resendErrorInfo || "Unable to resend OTP. Please try again."
     );
-  }, [sendOTPError, sendOTPErrorInfo]);
+
+    dispatch(clearResendOTPAction());
+  }, [resendError, resendErrorInfo, dispatch]);
 
   // Handle OTP input
   const handleChange = (i: number, value: string) => {
@@ -152,11 +200,18 @@ function VerifyInner() {
   };
 
   const resendOTP = () => {
-    if (sendOTPLoading || t > 0) return;
+    if (resendLoading || t > 0) return;
 
     setError("");
 
-    dispatch(loginSendOTPAction({ mobile }));
+    dispatch(clearResendOTPAction());
+
+    dispatch(
+      resendOTPAction({
+        mobile,
+        action: authType,
+      })
+    );
   };
 
   // Verify OTP API
@@ -171,20 +226,22 @@ function VerifyInner() {
       return;
     }
 
-    if (verifyOTPLoading) return;
+    if (verifyOTPLoading || resendLoading) return;
 
     setError("");
 
-    // Send mobile + OTP to backend
+    dispatch(clearVerifyOTPAction());
+
     dispatch(
-      loginVerifyOTPAction({
+      verifyOTPAction({
         mobile: mobile,
         otp: code,
+        action: authType,
       })
     );
   };
 
-  if (!mobile) return null;
+  if (!mobile || !authType) return null;
 
   return (
     <>
@@ -220,7 +277,7 @@ function VerifyInner() {
               inputMode="numeric"
               autoComplete={i === 0 ? "one-time-code" : "off"}
               aria-label={`Digit ${i + 1}`}
-              disabled={verifyOTPLoading}
+              disabled={verifyOTPLoading || resendLoading}
               onChange={(e) => handleChange(i, e.target.value)}
               onKeyDown={(e) => onKey(i, e)}
               className="h-14 w-full min-w-0 rounded-xl border border-border bg-elevated text-center text-xl font-semibold tabular-nums focus-visible:border-primary"
@@ -242,11 +299,11 @@ function VerifyInner() {
           ) : (
             <button
               type="button"
-              disabled={sendOTPLoading}
+              disabled={verifyOTPLoading || resendLoading}
               className="font-semibold text-primary disabled:opacity-50"
               onClick={resendOTP}
             >
-              {sendOTPLoading ? "Resending..." : "Resend code"}
+              {resendLoading ? "Resending..." : "Resend code"}
             </button>
           )}
         </p>
@@ -255,7 +312,11 @@ function VerifyInner() {
       {/* Verify button */}
       <Button
         className="w-full"
-        disabled={code.length !== 6 || verifyOTPLoading}
+        disabled={
+          code.length !== 6
+          || verifyOTPLoading
+          || resendLoading
+        }
         loading={verifyOTPLoading}
         onClick={verify}
       >
