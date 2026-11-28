@@ -160,21 +160,32 @@ export default function Login() {
         </label>
 
         {mode === "password" && (
-          <label className="mt-5 block space-y-1.5">
-            <span className="text-sm font-medium">Password</span>
-            <Input
-              type="password"
-              autoComplete="current-password"
-              placeholder="Enter your password"
-              value={password}
-              disabled={loading}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError("");
-              }}
-              onKeyDown={(e) => e.key === "Enter" && submit()}
-            />
-          </label>
+          <>
+            <label className="mt-5 block space-y-1.5">
+              <span className="text-sm font-medium">Password</span>
+              <Input
+                type="password"
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                value={password}
+                disabled={loading}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                onKeyDown={(e) => e.key === "Enter" && submit()}
+              />
+            </label>
+
+            <div className="mt-2 text-right">
+              <Link
+                href={`/forgot-password${valid ? `?m=${mobile}` : ""}`}
+                className="text-sm font-semibold text-primary"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </>
         )}
 
         {error && (
