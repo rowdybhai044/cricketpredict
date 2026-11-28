@@ -38,3 +38,14 @@ export interface ResendOTPResponse {
   mobile: string;
   action: string;
 }
+
+export interface ForgotPasswordSendOTPResponse {
+  success: boolean;
+  message: string;
+  mobile: string;
+}
+
+export interface ForgotPasswordResetResponse {
+  success: boolean;
+  message: string;
+}

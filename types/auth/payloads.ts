@@ -24,3 +24,14 @@ export interface SignUpSendOTPPayload {
   password: string;
   mobile: string;
 }
+
+export interface ForgotPasswordSendOTPPayload {
+  mobile: string;
+}
+
+export interface ForgotPasswordResetPayload {
+  mobile: string;
+  otp: string;
+  new_password: string;
+  confirm_new_password: string;
+}
