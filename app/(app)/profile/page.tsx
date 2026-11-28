@@ -44,7 +44,7 @@ export default function Profile() {
   const handleLogout = () => {
     localStorage.clear()
     // router.push('/login');
-    router.push("/welcome")
+    router.push("/login")
   }
 
   return (

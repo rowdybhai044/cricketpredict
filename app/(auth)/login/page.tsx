@@ -61,9 +61,13 @@ export default function Login() {
     const role = pwSuccessData?.user?.role
 
     if (role === "user") {
-      router.push("/");
+      router.replace("/matches");
     } else if (role === "admin") {
-      router.push("/");
+      // Temporary: Admin dashboard will be implemented later
+      router.replace("/matches");
+    } else {
+      toast.error("Invalid user role.");
+      router.replace("/login");
     }
     dispatch(clearLoginPasswordAction());
   }, [pwSuccessData, dispatch, router]);

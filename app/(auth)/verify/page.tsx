@@ -108,10 +108,10 @@ function VerifyInner() {
       const role = verifyOTPSuccessData?.user?.role;
 
       if (role === "user") {
-        router.replace("/");
+        router.replace("/matches");
       } else if (role === "admin") {
         // Temporary: admin dashboard will be implemented later
-        router.replace("/");
+        router.replace("/matches");
       } else {
         toast.error("Invalid user role.");
         router.replace("/login");
