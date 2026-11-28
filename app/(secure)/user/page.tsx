@@ -13,7 +13,7 @@ import { clearGetAllMatchesAction, getAllMatchesAction } from "@/store/actions";
 import { GetAllMatchesResponse } from "@/types/matches/responses";
 import { MATCHES } from "@/constants";
 
-export default function Home() {
+export default function Matches() {
   const dispatch = useAppDispatch()
 
   const [tab, setTab] = useState<"live" | "upcoming">("live");
