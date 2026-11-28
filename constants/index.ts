@@ -1,5 +1,17 @@
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export type RoleType =
+    | typeof Admin_Role
+    | typeof User_Role
+
+export const Admin_Role = "admin"
+export const User_Role = "user"
+
+export const ROLE = [
+    { value: Admin_Role, label: "Admin" },
+    { value: User_Role, label: "User" },
+];
+
 export const LOGINPASSWORD = "/api/auth/login/password/"
 export const LOGINSENDOTP = "/api/auth/login/send-otp/";
 export const VERIFYOTP = "/api/auth/verify-otp/";

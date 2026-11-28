@@ -7,15 +7,15 @@ import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 
 export default function Dashboard() {
-  const deposits = useStore((s) => s.deposits.filter((d) => d.status === "pending"));
-  const withdrawals = useStore((s) => s.withdrawals.filter((w) => w.status === "pending"));
-  const active = useStore((s) => s.matches.filter((m) => m.status === "live" || m.status === "upcoming").length);
+  // const deposits = useStore((s) => s.deposits.filter((d) => d.status === "pending"));
+  // const withdrawals = useStore((s) => s.withdrawals.filter((w) => w.status === "pending"));
+  // const active = useStore((s) => s.matches.filter((m) => m.status === "live" || m.status === "upcoming").length);
 
   const stats = [
     { label: "Total users", value: "1,248", icon: Users, href: "/admin/users", tint: "text-info bg-info/15" },
-    { label: "Pending deposits", value: deposits.length, icon: ArrowDownToLine, href: "/admin/deposits", tint: "text-warning bg-warning/15" },
-    { label: "Pending withdrawals", value: withdrawals.length, icon: ArrowUpFromLine, href: "/admin/withdrawals", tint: "text-warning bg-warning/15" },
-    { label: "Active matches", value: active, icon: CircleDot, href: "/admin/matches", tint: "text-primary bg-primary/15" },
+    // { label: "Pending deposits", value: deposits.length, icon: ArrowDownToLine, href: "/admin/deposits", tint: "text-warning bg-warning/15" },
+    // { label: "Pending withdrawals", value: withdrawals.length, icon: ArrowUpFromLine, href: "/admin/withdrawals", tint: "text-warning bg-warning/15" },
+    // { label: "Active matches", value: active, icon: CircleDot, href: "/admin/matches", tint: "text-primary bg-primary/15" },
   ];
 
   return (
@@ -36,7 +36,7 @@ export default function Dashboard() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="p-4">
           <div className="mb-2 flex items-center justify-between"><h2 className="font-semibold">Deposits to review</h2><Link href="/admin/deposits" className="text-sm text-primary">View all</Link></div>
-          {deposits.length === 0 ? <p className="py-6 text-center text-sm text-muted">All caught up.</p> : (
+          {/* {deposits.length === 0 ? <p className="py-6 text-center text-sm text-muted">All caught up.</p> : (
             <div className="divide-y divide-border">
               {deposits.slice(0, 4).map((d) => (
                 <div key={d.id} className="flex items-center justify-between py-3 text-sm">
@@ -45,11 +45,11 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </Card>
         <Card className="p-4">
           <div className="mb-2 flex items-center justify-between"><h2 className="font-semibold">Withdrawals to pay</h2><Link href="/admin/withdrawals" className="text-sm text-primary">View all</Link></div>
-          {withdrawals.length === 0 ? <p className="py-6 text-center text-sm text-muted">All caught up.</p> : (
+          {/* {withdrawals.length === 0 ? <p className="py-6 text-center text-sm text-muted">All caught up.</p> : (
             <div className="divide-y divide-border">
               {withdrawals.slice(0, 4).map((w) => (
                 <div key={w.id} className="flex items-center justify-between py-3 text-sm">
@@ -58,7 +58,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </Card>
       </div>
     </div>
